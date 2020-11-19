@@ -8,7 +8,7 @@ export const AppRoutes: Routes = [
 
   {
     path: '',
-    redirectTo: 'consent',
+    redirectTo: 'api-rule',
     pathMatch: 'full',
   },
   {
@@ -22,13 +22,13 @@ export const AppRoutes: Routes = [
     canActivate: [AuthGuard],
     runGuardsAndResolvers: 'always',
     children: [{
-      path: 'consent', loadChildren: () =>
+      path: 'api-rule', loadChildren: () =>
         import('./home/home.module').then(m => m.HomeModule)
     }],
   },
   {
     path: '**',
-    redirectTo: 'consent'
+    redirectTo: 'api-rule'
   }
 ];
 

@@ -18,7 +18,7 @@ export interface Menu {
 
 const MENUITEMS = [
   {
-    state: 'consent/home',
+    state: 'api-rule/home',
     name: 'Home',
     type: 'link',
     icon: 'fa fa-home',
