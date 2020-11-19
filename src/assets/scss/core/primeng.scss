@@ -1,0 +1,172 @@
+body .ui-button {
+  background-color: $primary !important;
+  border: 1px solid $primary !important;
+}
+body .ui-button.ui-state-default.ui-button-warning, body .ui-buttonset.ui-button-warning > .ui-button.ui-state-default {
+  color: $white;
+  background-color: $warning !important;
+  border: 1px solid $warning !important;
+}
+body .ui-button.ui-state-default.ui-button-success, body .ui-buttonset.ui-button-success > .ui-button.ui-state-default {
+  color: $white;
+  background-color: $success !important;
+  border: 1px solid $success !important;
+}
+
+body .ui-table .ui-table-tbody > tr:nth-child(even).ui-state-highlight {
+  background-color: #f9f9f9 !important;
+  color: #333333 !important;
+}
+body .ui-table .ui-table-tbody > tr.ui-state-highlight {
+  background-color: #f9f9f9 !important;
+  color: #333333 !important;
+}
+
+.ui-table-scrollable-body{
+  direction: ltr !important;
+}
+table.ui-table-scrollable-header-table {
+  margin: 0 !important;
+}
+.ui-table-scrollable-header-box{
+  /*margin-right: 0 !important;
+  margin-left: 0 !important;*/
+  direction: ltr !important;
+}
+
+//body .ui-widget {
+//  font-size: 14px !important;
+//  font-family: "Conv_STV" !important;
+//}
+body .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active {
+  background-color: $primary!important;
+  color: #ffffff;
+}
+
+.ui-table .ui-table-thead > tr > th {
+  color: $white !important;;
+  background-color: #2e538a !important ;
+}
+
+.ui-table table {
+  border-collapse: collapse;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  overflow: hidden;
+}
+.ui-table .ui-table-tbody > tr > td {
+  border: 1px solid #e5eae6 !important;
+}
+.ui-table .ui-table-tfoot > tr > td {
+  border: 1px solid #e5eae6 !important;
+}
+body .ui-table .ui-sortable-column .ui-sortable-column-icon {
+  color: #fff!important;
+}
+
+.sbm-dt .ui-table.ui-table-hoverable-rows .ui-table-tbody > tr.ui-selectable-row:not(.ui-state-highlight):not(.ui-contextmenu-selected):hover{
+  cursor: unset !important;
+}
+
+.ui-fieldset legend {
+  width : auto !important;
+}
+
+.ui-fieldset {
+  margin: 20px !important;
+  //margin-right: 20px !important;
+  //margin-top: 20px !important;
+}
+
+.ui-fieldset-toggleable .ui-fieldset-legend a{
+  padding: 0.1em 1em !important;
+}
+body .ui-fieldset .ui-fieldset-legend a{
+  color: #ffffff !important;
+}
+
+body .ui-fieldset .ui-fieldset-legend a .ui-fieldset-toggler {
+  color: #ffffff !important;
+}
+body .ui-fieldset.ui-fieldset-toggleable .ui-fieldset-legend a:hover {
+  background-color: #fcb813 !important;
+  border: 1px solid #fcb813 !important;
+  color: #ffffff !important;
+}
+body .ui-fieldset .ui-fieldset-legend a {
+  border: 1px solid #176f4e !important;
+  color: #ffffff;
+  background-color:  #176f4e !important;
+
+}
+
+
+body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tabview.ui-tabview-bottom .ui-tabview-nav li.ui-state-active, body .ui-tabview.ui-tabview-left .ui-tabview-nav li.ui-state-active, body .ui-tabview.ui-tabview-right .ui-tabview-nav li.ui-state-active {
+  background-color: #176f4e !important;
+  border: 1px solid #176f4e !important;
+}
+
+.ui-tabview.ui-tabview-right>.ui-tabview-nav {
+  width: 15% !important;
+}
+.ui-tabview.ui-tabview-right>.ui-tabview-panels {
+  width: 85% !important;
+}
+
+body .ui-chkbox .ui-chkbox-box.ui-state-active {
+  border-color: #fcb813 !important;
+  background-color: #fcb813 !important;
+}
+
+.pi.pi-chevron-right {
+  color : $primary !important;
+}
+
+.pi.pi-chevron-left {
+  color : $primary !important;
+}
+
+.pi.pi-chevron-down {
+  color : $primary !important;
+}
+
+.pi.pi-chevron-up {
+  color : $primary !important;
+}
+
+p-fieldset legend {
+  font-size: 1rem;
+}
+
+body .ui-slider.ui-slider-horizontal .ui-slider-handle {
+  margin-top: -1em !important;
+}
+body .ui-slider .ui-slider-handle {
+  height: 2.1em !important;
+  width: 2.1em !important;
+  text-align: center !important;
+  border: 2px solid $success !important;
+  background-color: $success !important;
+  color: $white !important;
+  font-weight: bold !important;
+  padding-top: 2px !important;
+}
+
+body .ui-slider .ui-slider-range {
+  background-color: $success !important;
+}
+
+.ui-fieldset .ui-fieldset-legend-text {
+  vertical-align: unset !important;
+}
+
+
+body .ui-dialog .ui-dialog-titlebar {
+  border: 1px solid #0D1232 !important;
+  background-color: #0D1232 !important;
+}
+
+
+body .ui-table .ui-table-tbody > tr > td{
+  padding: 1em 0.857em !important;
+}

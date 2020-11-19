@@ -1,0 +1,46 @@
+<app-card *ngIf = "isCard" [cardTitle]="label">
+  <div class="row" *ngIf = "values && values.length > 0;else noDataFound;">
+    <div class="{{gridCol}} text-left" *ngFor="let value of values;index as i">
+      <div class="row px-2 my-1">
+        <div class="col-auto px-1 m-0">
+          <span class = "badge badge-circle badge-light">{{i + 1}}</span>
+        </div>
+        <div class="col m-0 p-0 pt-1">
+          <span>{{value.name?value.name: value}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noDataFound>
+    <div class="row">
+      <div class="col text-center">
+        no result
+      </div>
+    </div>
+  </ng-template>
+</app-card>
+
+<div class="row" *ngIf = "!isCard">
+  <div class="col">
+    <div class="row" *ngIf = "values && values.length > 0;else noDataFound;">
+      <div class="{{gridCol}} text-left" *ngFor="let value of values;index as i">
+        <div class="row px-2 my-1">
+          <div class="col-auto px-1 m-0">
+            <span class = "badge badge-circle badge-light">{{i + 1}}</span>
+          </div>
+          <div class="col m-0 p-0 pt-1">
+            <span>{{value.name?value.name: value}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noDataFound>
+      <div class="row">
+        <div class="col text-center">
+          no result
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+

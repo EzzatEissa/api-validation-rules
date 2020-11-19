@@ -1,0 +1,118 @@
+<div class="row">
+  <div class="col text-left">
+    <button class="btn btn-primary btn-labeled mr-2 mb-3"
+            (click)="openRuleSetDialog(null, 'create')"><b><i aria-hidden="true" class="fa fa-plus"></i></b> Create
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="row">
+      <div class="col-4 card-view-hover mb-3" *ngFor="let key of objUserRuleKeys(currentUserRuleSet)">
+        <app-card-view title="{{key}}"
+                       icon="fa fa-gg-circle text-blue fa-9x" (click) = "openRuleSetDialog(key, 'update')"></app-card-view>
+      </div>
+      <!--<div class="col-4 card-view-hover m-2">-->
+        <!--<app-card-view title="Rule set 2"-->
+                       <!--icon="icon-smartphone text-blue fa-9x"-->
+                       <!--link="/consent/app"></app-card-view>-->
+      <!--</div>-->
+      <!--<div class="col-4 card-view-hover">-->
+        <!--<app-card-view title="Rule set 3"-->
+                       <!--icon="icon-unlock fa-9x text-blue"-->
+                       <!--link="/consent/permission"></app-card-view>-->
+      <!--</div>-->
+
+
+    </div>
+
+    <!--objUserRuleKeys-->
+  </div>
+
+</div>
+
+<p-dialog [header]="dialogHeader" [(visible)]="newRuleSetDisplay" position="center" [modal]="true"
+          [style]="{width: '75vw'}" [baseZIndex]="10000" appendToBody="true">
+  <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+
+    <div class="row">
+      <div class="col">
+        <p-accordion>
+          <p-accordionTab [header]="key" *ngFor="let key of objKeys(selectedRuleSet)">
+            <p-table [value]="selectedRuleSet[key]"
+                     [responsive]="true"
+                     [rowHover]="true"
+                     class="sbm-dt"
+                     [paginator]="selectedRuleSet[key]?.length > 10"
+                     [rows]="5">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th class="text-center" style="width: 15rem;">{{'Rule Name' | translate}}</th>
+                  <th class="text-center">{{'Rule Description' | translate}}</th>
+                  <th class="text-center" style="width: 5rem;">{{'Rule Spec' | translate}}</th>
+                  <th class="text-center" style="width: 7rem;">{{'Rule Default Value' | translate}}</th>
+                </tr>
+              </ng-template>
+              <ng-template let-i="rowIndex" pTemplate="body" let-dtSelectedRule>
+                <tr class="ui-selectable-row">
+                  <td class="text-center">{{dtSelectedRule.name}}</td>
+                  <td class="text-center">{{dtSelectedRule.description}}</td>
+                  <td class="text-center">{{dtSelectedRule.spec}}</td>
+                  <td class="text-center">
+                    <select
+                      [(ngModel)]="selectedRuleSet[key][i].defaultValue"
+                      name="{{key}}_defaultValue_{{dtSelectedRule.name}}">
+                      <option *ngFor="let defaultValue of defaultValues"
+                              [value]="defaultValue">{{defaultValue}}</option>
+                    </select>
+                  </td>
+
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="5" class="text-center">
+                    no data
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-accordionTab>
+        </p-accordion>
+
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col">
+        <div class="row">
+          <div class="col form-group">
+            <label>Ruleset Name</label>
+            <input type="text"
+                   name="name"
+                   class="form-control"
+                   [(ngModel)]="model.name"
+                   #name="ngModel"
+                   [ngClass]="{ 'is-invalid': f.submitted && name.invalid }"
+                   required>
+            <div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
+              <div *ngIf="name.errors.required">Name is required</div>
+            </div>
+          </div>
+          <div class="col">
+            <button class="btn btn-primary btn-labeled mr-2 mb-3" style="margin-top: 30px;"><b><i aria-hidden="true" class="fa fa-plus"></i></b>
+              {{(selectedAction === 'create')? 'Create' : 'Update'}}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+      </div>
+    </div>
+
+
+
+  </form>
+
+
+</p-dialog>

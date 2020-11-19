@@ -1,0 +1,617 @@
+<!-- Main-->
+<div id ="app" class="app {{headerSkinColor}} {{themeSkinColor}}" [dir]="layout" [class.app-dark]="dark" [class.boxed]="boxed"
+	[class.collapsed-sidebar]="collapseSidebar" [class.compact-sidebar]="compactSidebar" [class.customizer-in]="customizerIn"
+	[class.chat-window--open]="chatWindowOpen" [class.sidebar-closed]="sidebarClosed" [class.sidebar-opened]="!sidebarClosed" [class.chat-sidebar]="chatSidebar" [ngClass]="{'icon-sidebar-wrap': miniSidebar}">
+	<ng-sidebar-container>
+		<div ng-sidebar-content>
+			<ng-sidebar #sidenav [(opened)]="_opened" [(mode)]="_mode" [closeOnClickOutside]="closeOnClickOutside()" [(showBackdrop)]="_showBackdrop">
+				<div class="sidebar-panel sbm-sidenav " id="showSidebar">
+					<div class="sidebar-logo-wrap">
+						<div class="sidebar-logo d-flex">
+							<div class="logo-sign">
+								<img class="logo-menu" src="assets/img/sbm/logo.png" alt="">
+							</div>
+						</div>
+					</div>
+					<div class="sidebar-container">
+						<perfect-scrollbar class="sidenav-scrollbar-container">
+							<div>
+								<nav menuToggleDirective class="navigation">
+									<ul class="sbm-nav">
+										<li class="nav-item" menuToggleLink *ngFor="let menuitem of menuItems.getAll()" [ngClass]="{'menu-item-has-child': menuitem.type=='sub'}">
+											<a target="_blank" href="{{menuitem.state}}" *ngIf="menuitem.type === 'ext-link'"
+												tourAnchor="tour-ui">
+												<i class="{{ menuitem.icon }}"></i>
+												<p class="text-nowrap mb-0">
+													<span>{{ menuitem.name | translate }}</span>{{menuitem.label}}
+												</p>
+											</a>
+											<a menuToggle [routerLink]="['/' + menuitem.state]" routerLinkActive="active-link" *ngIf="menuitem.type === 'link'">
+												<i class="{{ menuitem.icon }}"></i>
+												<p class="text-nowrap mb-0">
+													<span>{{ menuitem.name | translate }}</span>
+												</p>
+												<ng-container *ngIf="menuitem.label">
+													<span class="sidebar-label">{{menuitem.label}}</span>
+												</ng-container>
+											</a>
+											<a menuToggle href="javascript:void(0)" *ngIf="menuitem.type === 'sub'">
+												<i class="{{ menuitem.icon }}"></i>
+												<p class="text-nowrap mb-0">
+													<span>{{ menuitem.name | translate }}</span>
+												</p>
+												<i class="fa fa-caret-down" aria-hidden="true"></i>
+												<ng-container *ngIf="menuitem.label">
+													<span class="sidebar-label">{{menuitem.label}}</span>
+												</ng-container>
+											</a>
+											<ul class="sub-menu sbm-nav" *ngIf="menuitem.type === 'sub'">
+												<li class="nav-item" *ngFor="let childitem of menuitem.children" routerLinkActive="open">
+													<a [routerLink]="['/', menuitem.state, childitem.state ]" routerLinkActive="active-link">
+														<i class="icon icon-arrows-right-double"></i>
+														<p class="text-nowrap mb-0"><span>{{ childitem.name | translate }}</span></p>
+														<ng-container *ngIf="childitem.label">
+															<span class="sidebar-label">{{childitem.label}}</span>
+														</ng-container>
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+
+								</nav>
+							</div>
+						</perfect-scrollbar>
+					</div>
+				</div>
+				<!-- sidebar panel closed -->
+			</ng-sidebar>
+			<section class="main-contents">
+				<header class="main-header">
+					<div class="d-flex justify-content-between align-items-center sbm-header-toolbar w-100">
+						<div class="h-100 d-flex align-items-center col-sm-7 col-md-7 col-lg-7 pl-0 pr-0">
+							<div class="h-100 d-flex justify-content-start align-items-center">
+								<div class="h-100 sbm-ham-icon">
+									<button class="c-hamburger c-hamburger--rot" (click)="_toggleOpened()">
+										<span tourAnchor="start.tour">toggle menu</span>
+									</button>
+								</div>
+							</div>
+							<div class="h-100 pl-4 search-bar w-100 h-100 d-none d-md-block search-w">
+								<form class="h-100 search-form">
+									<div class="h-100">
+										<p class="text-right fa-2x font-weight-bold">Api Validation Rules</p>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="align-items-end pr-0 col-sm-5 col-md-5 col-lg-5">
+							<div class="d-flex secondary-menu justify-content-end align-items-center">
+								<ul class="nav secondary-menu-list d-flex justify-content-end align-items-center"
+									data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+									<li tourAnchor="tour-full-screen" class="d-none d-md-block fullscreen-toggle" (click)="toggleFullscreen()">
+										<a href="javascript:void(0)" class="zoom-out">
+											<i class="material-icons icon-maximize" *ngIf="!isFullscreen"></i>
+											<i class="material-icons icon-minimize" *ngIf="isFullscreen"></i>
+										</a>
+									</li>
+									<!--<li class="d-none d-md-block dropdown">-->
+										<!--<a href="javascript:void(0)" id="navbarDropdownMenu" class="faa-parent animated-hover"-->
+											<!--data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="notifi-bell material-icons faa-slow faa-ring">notifications</i>-->
+											<!--<span class="fa fa-circle fa-notify text-primary dot-note"></span></a>-->
+										<!--<div class="dropdown-menu rounded-0 dropdown-menu-right dropdown-menu-lg p-0"-->
+											<!--aria-labelledby="navbarDropdownMenu">-->
+											<!--<div class="dropdown-header bg-primary d-flex justify-content-between"><span class="align-self-center">{{'12 Pending notifications'|translate}}</span><a href="javascript:void(0)" class="align-self-center">{{'View All'|translate}}</a></div>-->
+											<!--<a class="dropdown-item  d-flex pt-3" href="javascript:void(0)">-->
+												<!--<div class="icon-area  align-self-start">-->
+													<!--<i class="fa fa-envelope-o"></i>-->
+												<!--</div>-->
+												<!--<div class="icon-msg mx-2"> <span class="align-self-start d-block ">{{'You have 16 New messages'|translate}}</span>-->
+													<!--<small>12 min ago</small>-->
+												<!--</div>-->
+											<!--</a>-->
+											<!--<a class="dropdown-item  d-flex" href="javascript:void(0)">-->
+												<!--<div class="icon-area align-self-start">-->
+													<!--<i class="fa fa-clock-o" aria-hidden="true"></i>-->
+												<!--</div>-->
+												<!--<div class="icon-msg mx-2"> <span class="align-self-start d-block ">{{'Server reboot scheduled' | translate}}</span>-->
+													<!--<small>12 min ago</small>-->
+												<!--</div>-->
+											<!--</a>-->
+											<!--<a class="dropdown-item  d-flex pb-3" href="javascript:void(0)">-->
+												<!--<div class="icon-area align-self-start">-->
+													<!--<i class="fa fa-long-arrow-up" aria-hidden="true"></i>-->
+												<!--</div>-->
+												<!--<div class="icon-msg mx-2"> <span class="align-self-start d-block ">{{'Revenue raised by 67%' | translate}}</span>-->
+													<!--<small>12 min ago</small>-->
+												<!--</div>-->
+											<!--</a>-->
+										<!--</div>-->
+									<!--</li>-->
+									<!--<li class="d-none d-md-block dropdown">-->
+										<!--<a href="javascript:void(0)" class="open-box" id="navbarDropdownMen" data-toggle="dropdown"-->
+											<!--aria-haspopup="true" aria-expanded="false"><i class="material-icons msg-close">mail_outline</i><i-->
+												<!--class="fa fa-envelope-open-o"></i><span class="fa fa-circle fa-notify dot-note text-danger"></span></a>-->
+										<!--<div class="dropdown-menu rounded-0 dropdown-menu-right dropdown-menu-lg p-0"-->
+											<!--aria-labelledby="navbarDropdownMen">-->
+											<!--<div class="dropdown-header bg-warning d-flex justify-content-between"><span class="align-self-center">{{'15 total messages'|translate}}</span><a href="javascript:void(0)" class="align-self-center">{{'View All'|translate}}</a></div>-->
+											<!--<a class="dropdown-item  d-flex pt-3" [routerLink]="['/inbox']" [routerLinkActive]="['is-active']">-->
+												<!--<div class="icon-area  align-self-start">-->
+													<!--<i class="fa fa-envelope-o"></i>-->
+												<!--</div>-->
+												<!--<div class="icon-msg mx-2"> <span class="align-self-start d-block ">{{'Inbox'|translate}}</span>-->
+													<!--<small>15 new messages</small>-->
+												<!--</div>-->
+											<!--</a>-->
+											<!--<a class="dropdown-item  d-flex" [routerLink]="['/inbox']" [routerLinkActive]="['is-active']">-->
+												<!--<div class="icon-area  align-self-start">-->
+													<!--<i class="fa fa-gift" aria-hidden="true"></i>-->
+												<!--</div>-->
+												<!--<div class="icon-msg mx-2"> <span class="align-self-start d-block ">{{'Promotion messages'| translate}}</span>-->
+													<!--<small>5 messages</small>-->
+												<!--</div>-->
+											<!--</a>-->
+											<!--<a class="dropdown-item  d-flex" [routerLink]="['/inbox']" [routerLinkActive]="['is-active']">-->
+												<!--<div class="icon-area align-self-start">-->
+													<!--<i class="fa fa-exclamation-circle" aria-hidden="true"></i>-->
+												<!--</div>-->
+												<!--<div class="icon-msg mx-2"> <span class="align-self-start d-block ">{{'Spam message'|translate}}</span>-->
+													<!--<small>12 min ago</small>-->
+												<!--</div>-->
+											<!--</a>-->
+											<!--<a class="dropdown-item  d-flex pb-3" href="javascript:void(0)">-->
+												<!--<div class="icon-area align-self-start">-->
+													<!--<i class="fa fa-bullhorn" aria-hidden="true"></i>-->
+												<!--</div>-->
+												<!--<div class="icon-msg mx-2"> <span class="align-self-start d-block ">{{'Social Media'| translate}}</span>-->
+													<!--<small>34 new messages</small>-->
+												<!--</div>-->
+											<!--</a>-->
+										<!--</div>-->
+									<!--</li>-->
+									<li class="dropdown">
+										<a class="relative rounded-bg" href="javascript:void(0)" id="navbarDropdownMenuLin"
+											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<img class="rounded-circle" src="assets/img/user-3.jpg" alt="User-image" width="43"
+												height="43">
+											<div class="online-caret bg-primary circle"><i class="fa fa-caret-down"></i></div>
+										</a>
+										<div class="dropdown-menu rounded-0 dropdown-menu-right p-0" aria-labelledby="navbarDropdownMenuLin">
+											<a class="dropdown-item  d-flex pt-3" routerLink="/user-pages/user-profile">
+												<div class="icon-area  align-self-start">
+													<i class="icon-user"></i>
+												</div>
+												<div class="mx-2"> <span class="align-self-start d-block ">{{'My Profile'|translate}}</span>
+												</div>
+											</a>
+											<a class="dropdown-item  d-flex pb-2" (click)="logOut()">
+												<div class="icon-area  align-self-start">
+													<i class=" icon-logout"></i>
+												</div>
+												<div class="mx-2"> <span class="align-self-start d-block ">{{'Logout'|translate}}</span></div>
+											</a>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</header>
+				<!-- main header closed -->
+				<div class="sbm-base-container" #scrollContainer>
+					<div class="d-flex justify-content-between align-items-center page-info w-100 d-none d-md-block">
+						<span class="navbar-brand">{{header}}</span>
+					</div>
+					<div class="inner-container">
+            <div class="row">
+              <div class="col">
+                <router-outlet (activate)="onActivate($event, scrollContainer)"></router-outlet>
+              </div>
+            </div>
+
+						<!--<tour-step-template>-->
+							<!--<ng-template let-step="step">-->
+								<!--<div (click)="$event.stopPropagation()">-->
+									<!--<p class="tour-step-content">{{step?.content}}</p>-->
+									<!--<div class="tour-step-navigation">-->
+										<!--<button *ngIf="tourService.hasPrev(step)" class="btn btn-sm" (click)="tourService.prev()">-->
+											<!--<i class="material-icons">arrow_back</i> Prev</button>-->
+										<!--<button *ngIf="tourService.hasNext(step)" class="btn btn-sm" (click)="tourService.next()">Next-->
+											<!--<i class="material-icons">arrow_forward</i></button>-->
+										<!--<button class="btn btn-sm btn-socondary rounded-0" (click)="tourService.end()">End</button>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</ng-template>-->
+						<!--</tour-step-template>-->
+            <!--<footer>-->
+              <!--<div class="row">-->
+                <!--<div class="col p-3">-->
+                  <!--&copy; Copy rights reserved to Saudi Business Machine <a href="http://www.sbm.com.sa">SBM</a>-->
+                <!--</div>-->
+              <!--</div>-->
+
+            <!--</footer>-->
+					</div>
+          <footer class="footer">
+            <div class="row">
+              <div class="col-sm-12 col-lg-2 col-md-2">
+                <a href="/" title="">
+                  <img class="logo-menu" src="assets/img/sbm/logo.png" alt="">
+                </a>
+              </div>
+              <div class="col-sm-6 col-lg-2 col-md-2">
+                <h6>About SBM</h6>
+                <ul class="no-bullet">
+                  <li><a href="https://www.sbm.com.sa/career-opportunities">Careers</a></li>
+                  <li><a href="https://www.sbm.com.sa/latest-news">Latest News</a></li>
+                  <li><a href="https://www.sbm.com.sa/content/corporate-vision-mission">Corporate Vision</a></li>
+                  <li><a href="https://www.sbm.com.sa/content/overview">About SBM</a></li>
+                </ul>
+              </div>
+              <div class="col-sm-6 col-lg-2 col-md-2">
+                <h6>Discover</h6>
+                <ul class="no-bullet">
+                  <li><a href="https://www.sbm.com.sa/content/ibm-hardware-0">Our Products</a></li>
+                  <li><a href="https://www.sbm.com.sa/content/integration">Our Services</a></li>
+                  <li><a href="https://www.sbm.com.sa/content/quality-management-system">Our Partners</a></li>
+                  <li><a href="https://www.sbm.com.sa/case-studies">Case Studies</a></li>
+                </ul>
+              </div>
+              <div class="col-sm-6 col-lg-2 col-md-2">
+                <h6>Important links</h6>
+                <ul class="no-bullet">
+                  <li><a href="https://www.sbm.com.sa/content/club-blue">SBM Club Blue</a></li>
+                  <li><a href="https://www.sbm.com.sa/content/press-kit">Press Kit</a></li>
+                  <li><a href="https://www.sbm.com.sa/contact-us">Support</a></li>
+                  <li><a href="https://www.sbm.com.sa/visit">Visitor Registration</a></li>
+                </ul>
+              </div>
+              <div class="col-sm-6 col-lg-2 col-md-2">
+                <h6 class="">Follow Us</h6>
+                <ul class="foot_menu soc_ico no-bullet">
+                  <li><a href="https://www.facebook.com/sbm.com.sa/"><span class="fa fa-facebook-square"></span></a></li>
+                  <li><a href="https://www.linkedin.com/company/165857?trk=tyah&amp;trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A165857%2Cidx%3A4-1-11%2CtarId%3A1453388062604%2Ctas%3Asaudi%20business"><span class="fa fa-linkedin-square"></span></a></li>
+                  <li><a href="https://twitter.com/SBMsaudi"><span class="fa fa-twitter-square"></span></a></li>
+                  <li><a href="https://www.youtube.com/channel/UCKmC9uP_E-iQDns7gAnV78A"><span class="fa fa-youtube-square"></span></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row soc_block">
+              <div class="col-sm-12 col-lg-2 col-md-2 text-left">
+                <p>© SBM 2020 </p>
+              </div>
+            </div>
+          </footer>
+				</div>
+
+
+			</section>
+
+			<!-- main content closed -->
+		</div>
+
+		<!-- Sidebar Closed -->
+	</ng-sidebar-container>
+	<!-- Sidebar -->
+	<!--<div class="sbm-customizer">-->
+
+		<!--&lt;!&ndash; Nav tabs &ndash;&gt;-->
+		<!--<perfect-scrollbar class="settings-panel">-->
+			<!--<div class="theme-options">-->
+				<!--<div class="theme-head">-->
+					<!--<h4>{{'Theme Settings'|translate}}</h4>-->
+				<!--</div>-->
+				<!--<div class="form-group lang-change">-->
+					<!--<label>{{'Select Language'|translate}}</label>-->
+					<!--<select class="layout-item custom-select mt-2 form-control mt-1 rounded-0" placeholder="Language" [(ngModel)]="currentLang" #langSelect="ngModel" (ngModelChange)="translate.use(currentLang)">-->
+						<!--<option *ngFor="let lang of translate.getLangs()" [value]="lang">{{ lang }}</option>-->
+					<!--</select>-->
+				<!--</div>-->
+				<!--<div class="layout-item mb-4 lang-change">-->
+					<!--<div class="more-theme-style mb-2">-->
+						<!--<label class="mb-2">{{'Choose Sidebar Color'|translate}}</label>-->
+						<!--<div class="d-flex align-items-center">-->
+							<!--<a href="javascript:void(0)" class="theme default d-block mb-2 mr-1" (click)="changeThemeColor('default')"><i class="fa fa-circle fa-lg text-light" aria-hidden="true"></i> </a>-->
+							<!--<a href="javascript:void(0)" class="theme primary d-block mb-2 mr-1" (click)="changeThemeColor('primary')"><i class="fa fa-circle fa-lg text-primary" aria-hidden="true"></i></a>-->
+							<!--<a href="javascript:void(0)" class="theme success d-block mb-2 mr-1" (click)="changeThemeColor('success')"><i class="fa fa-circle fa-lg text-success" aria-hidden="true"></i></a>-->
+							<!--<a href="javascript:void(0)" class="theme warning d-block mb-2 mr-1" (click)="changeThemeColor('warning')"><i class="fa fa-circle fa-lg text-warning" aria-hidden="true"></i></a>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="more-theme-style mb-2">-->
+						<!--<label class="mb-2">{{'Choose Header Color'|translate}}</label>-->
+						<!--<div class="d-flex align-items-center">-->
+							<!--<a href="javascript:void(0)" class="theme default d-block mb-2 mr-1" (click)="changeHeaderColor('default')"><i class="fa fa-circle fa-lg text-light" aria-hidden="true"></i></a>-->
+							<!--<a href="javascript:void(0)" class="theme header-primary d-block mb-2 mr-1" (click)="changeHeaderColor('header-primary')"><i class="fa fa-circle fa-lg text-primary" aria-hidden="true"></i></a>-->
+							<!--<a href="javascript:void(0)" class="theme header-success d-block mb-2 mr-1" (click)="changeHeaderColor('header-success')"><i class="fa fa-circle fa-lg text-success" aria-hidden="true"></i></a>-->
+							<!--<a href="javascript:void(0)" class="theme header-warning d-block mb-2 mr-1" (click)="changeHeaderColor('header-warning')"><i class="fa fa-circle fa-lg text-warning" aria-hidden="true"></i></a>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--<div class="layout-item form-check mb-3" id="icon-sidebar">-->
+					<!--<label class="form-check-label">-->
+						<!--<input (change)="toggleSidebar($event.target.checked)" class="form-check-input" type="checkbox" value="">-->
+						<!--{{'Toggle Sidebar'|translate}}-->
+					<!--</label>-->
+				<!--</div>-->
+				<!--<div class="layout-item form-check mb-3 collapse-icon-disabled">-->
+					<!--<label class="form-check-label">-->
+						<!--<input [(ngModel)]="collapseSidebar" (change)="compactSidebar = false" class="form-check-input" type="checkbox" value="">-->
+						<!--{{'Collapsed Sidebar'|translate}}-->
+					<!--</label>-->
+				<!--</div>-->
+				<!--<div class="layout-item boxed-layout-md form-check mb-3 disabled-checkbox" id="boxed-layout">-->
+					<!--<label class="form-check-label">-->
+						<!--<input (change)="boxedLayout($event.target.checked)" class="form-check-input" type="checkbox" value=""> {{'Boxed Layout'|translate}}-->
+					<!--</label>-->
+				<!--</div>-->
+				<!--<div class="layout-item form-check mb-3">-->
+					<!--<label class="form-check-label">-->
+						<!--<input [(ngModel)]="dark" class="form-check-input" type="checkbox" value=""> {{'Dark Mode'|translate}}-->
+					<!--</label>-->
+				<!--</div>-->
+				<!--<div class="layout-item form-check mb-3">-->
+					<!--<label class="form-check-label">-->
+						<!--<input (change)="changeRTL($event.target.checked)" class="form-check-input" type="checkbox" value="">-->
+						<!--{{'RTL'|translate}}-->
+					<!--</label>-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--&lt;!&ndash; theme option closed &ndash;&gt;-->
+		<!--</perfect-scrollbar>-->
+		<!--&lt;!&ndash; setting panel Closed &ndash;&gt;-->
+	<!--</div>-->
+	<!-- sbm customize -->
+	<div class="chat-sidebar-pan">
+		<div class="settings-panel">
+			<ul class="nav nav-tabs" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#chat" role="tab">{{'Chat'|translate}}</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#setting" role="tab">{{'Settings'|translate}}</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="chat" role="tabpanel">
+					<div class="chat-tabs">
+						<a href="javascript:void(0)" (click)="chatWindowFunction()">
+							<div class="d-flex justify-content-start">
+								<div class=""> <img class="img-responsive rounded-circle" alt="Chat session" src="assets/img/user-1.jpg"
+										width="50" height="50"> </div>
+								<div class="px-2">
+									<span class="d-block">Connor Soto</span> <small class="d-block">See you later</small>
+								</div>
+							</div>
+						</a>
+						<a href="javascript:void(0)" (click)="chatWindowFunction()">
+							<div class="d-flex justify-content-start">
+								<div class=""> <img class="rounded-circle" alt="Chat session" src="assets/img/user-1.jpg"
+										width="50" height="50"> </div>
+								<div class="px-2">
+									<span class="d-block">Miguel Romero</span> <small class="d-block">Hope for best!</small>
+								</div>
+							</div>
+						</a>
+						<a href="javascript:void(0)" (click)="chatWindowFunction()">
+							<div class="d-flex justify-content-start">
+								<div class=""> <img class="rounded-circle" alt="Chat session" src="assets/img/user-2.jpg"
+										width="50" height="50"> </div>
+								<div class="px-2">
+									<span class="d-block">Marguerite Riley</span> <small class="d-block">Good bye and TC!</small>
+								</div>
+							</div>
+						</a>
+						<a href="javascript:void(0)" (click)="chatWindowFunction()">
+							<div class="d-flex justify-content-start">
+								<div class=""><img class="rounded-circle" alt="Chat session" src="assets/img/user-3.jpg"
+										width="50" height="50"> </div>
+								<div class="px-2">
+									<span class="d-block">Marian Burke</span> <small class="d-block">Talk u later</small>
+								</div>
+							</div>
+						</a>
+						<a href="javascript:void(0)" (click)="chatWindowFunction()">
+							<div class="d-flex justify-content-start">
+								<div class=""><img class="rounded-circle" alt="Chat session" src="assets/img/user-4.jpg"
+										width="50" height="50"> </div>
+								<div class="px-2">
+									<span class="d-block">Wayne Hoffman</span> <small class="d-block">Ready for sunday</small>
+								</div>
+							</div>
+						</a>
+						<a href="javascript:void(0)" (click)="chatWindowFunction()">
+							<div class="d-flex justify-content-start">
+								<div class=""> <img class="rounded-circle" alt="Chat session" src="assets/img/user-5.jpg"
+										width="50" height="50"> </div>
+								<div class="px-2 ">
+									<span class="d-block">Chris Evans</span> <small class="d-block">am fine ,thanks</small>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="tab-pane" id="setting" role="tabpanel">
+					<div class="system-setting">
+						<div class="setting-header text-muted"><i class="fa fa-cog"></i> System</div>
+						<ul class="list-style-none pl-0">
+							<li class="d-flex justify-content-between">
+								<div class="align-self-center">Nofications</div>
+								<div class="onoffswitch align-self-center">
+									<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-nofications"
+										checked>
+									<label class="onoffswitch-label mb-0" for="switch-nofications">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</li>
+							<li class="d-flex justify-content-between">
+								<div class="align-self-center">Quick Results</div>
+								<div class="onoffswitch align-self-center">
+									<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-results"
+										checked>
+									<label class="onoffswitch-label mb-0" for="switch-results">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</li>
+							<li class="d-flex justify-content-between">
+								<div class="align-self-center">Auto Updates</div>
+								<div class="onoffswitch align-self-center">
+									<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-updates"
+										checked>
+									<label class="onoffswitch-label mb-0" for="switch-updates">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</li>
+						</ul>
+						<div class="setting-header mt-3 text-muted"> <i class="fa fa-user"></i> Account</div>
+						<ul class="list-style-none pl-0">
+							<li class="d-flex justify-content-between">
+								<div class="align-self-center">Offline Mode</div>
+								<div class="onoffswitch align-self-center">
+									<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-offline"
+										checked>
+									<label class="onoffswitch-label mb-0" for="switch-offline">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</li>
+							<li class="d-flex justify-content-between">
+								<div class="align-self-center">Location Share</div>
+								<div class="onoffswitch align-self-center">
+									<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-location"
+										checked>
+									<label class="onoffswitch-label mb-0" for="switch-location">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</li>
+							<li class="d-flex justify-content-between">
+								<div class="align-self-center">Show Offline User</div>
+								<div class="onoffswitch align-self-center">
+									<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-offline-user"
+										checked>
+									<label class="onoffswitch-label mb-0" for="switch-offline-user">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</li>
+							<li class="d-flex justify-content-between">
+								<div class="align-self-center">Save History</div>
+								<div class="onoffswitch align-self-center">
+									<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch-history"
+										checked>
+									<label class="onoffswitch-label mb-0" for="switch-history">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--setting panel closed -->
+	</div>
+	<!-- Chat Sidebar -->
+	<div class="modal fade search-modal" id="search-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+		<div class="modal-dialog" role="document">
+			<div class="container">
+				<div class="mb-5">
+					<input class="overlay-search" placeholder="Search...">
+				</div>
+				<div class="search-suggestion">
+					<span class="d-block mb-3"><strong>Sugguestions</strong></span>
+					<ul class="row search-list">
+						<li class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
+							<a href="javascript:void(0)"><span class="d-inline-block square-50 circle bg-success mr-2">A</span><span
+									class="search-filter mx-1">admin themes</span> in angular4</a>
+							<span class="d-block">@themeforest</span>
+						</li>
+						<li class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
+							<a href="javascript:void(0)"><span class="d-inline-block square-50 circle bg-success mr-2">H</span><span
+									class="search-filter mx-1">5 Star Hotels</span> in hotal</a>
+							<span class="d-block">@abcdehotels</span>
+						</li>
+						<li class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
+							<a href="javascript:void(0)"><span class="d-inline-block square-50 circle bg-success mr-2">F</span><span
+									class="search-filter mx-1">air ticket</span> in flights</a>
+							<span class="d-block">@airindia</span>
+						</li>
+						<li class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
+							<a href="javascript:void(0)"><span class="d-inline-block square-50 circle bg-success mr-2">D</span><span
+									class="search-filter mx-1">css design</span> in designs</a>
+							<span class="d-block">@csstricks</span>
+						</li>
+						<li class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
+							<a href="javascript:void(0)"><span class="d-inline-block square-50 circle bg-success mr-2">C</span><span
+									class="search-filter mx-1">programming</span> in code</a>
+							<span class="d-block">@abcdproject</span>
+						</li>
+						<li class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
+							<a href="javascript:void(0)"><span class="d-inline-block square-50 circle bg-success mr-2">M</span><span
+									class="search-filter mx-1">dunkirk</span> in movies</a>
+							<span class="d-block">@imdb</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal -->
+	<div class="chat-window">
+		<div class="chat-window-i">
+			<div class="user-name-chat bg-grey d-flex justify-content-between">
+				<span class="align-self-center">Dekota James</span> <a href="javascript:void(0)" (click)="chatWindowFunction()"><i
+						class="material-icons align-self-center">close</i></a>
+			</div>
+			<div class="chat-inner">
+				<ul>
+					<li class="user-msg mb-3">
+						<div class="d-flex">
+							<img src="assets/img/user-4.jpg" class="circle chat-user-img" width="55" height="55" alt="user-image">
+							<div class="msg-detail px-2">
+								<span class="text-primary d-block mb-1">Dekota</span>
+								<div class="box-shadow p-2 msg-box mb-1">
+									<p>
+										Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, magni?
+									</p>
+								</div>
+								<div class="time text-muted"><small>3 min ago</small></div>
+							</div>
+						</div>
+					</li>
+					<li class="my-msg mb-3">
+						<div class="d-flex">
+							<img src="assets/img/user-2.jpg" class="circle chat-user-img" width="55" height="55" alt="user-image">
+							<div class="msg-detail px-2">
+								<span class="text-primary d-block mb-1">Admin</span>
+								<div class="box-shadow p-2 msg-box mb-1">
+									<p>
+										Lorem ipsum dolor sit amet, consectetur adipisicing.
+									</p>
+								</div>
+								<div class="time text-muted"><small>3 min ago</small></div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="send-msg-chat p-3">
+				<input class="form-control form-control-lg mb-3" placeholder="Type message" type="text">
+				<button class="btn btn-primary" type="submit">Send</button>
+			</div>
+		</div>
+	</div>
+	<!-- Chat Window -->
+</div>
+<!-- app closed -->

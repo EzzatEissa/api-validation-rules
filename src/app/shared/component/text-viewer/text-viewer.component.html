@@ -1,0 +1,11 @@
+<label>{{label | translate}}
+  <i *ngIf = "hasToolTip" [ngbTooltip]="toolTipMsg | translate" class="fa fa-exclamation-circle text-success"></i>
+</label>
+<div class = "font-weight-bold pb-2">
+  <span *ngIf="value && value.constructor.name !== 'Boolean'">{{isTranslate? (value |translate) : value}}
+  </span>
+  <span *ngIf="value === true">{{'yes' | translate}}</span>
+  <span *ngIf="value === false">{{'no' | translate}}</span>
+  <span *ngIf="value === null || value === '' || value === undefined">{{emptyMsg | translate}}</span>
+  <span *ngIf="value === 0">0</span>
+</div>

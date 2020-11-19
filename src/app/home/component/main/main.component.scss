@@ -1,0 +1,32 @@
+.card-view-hover:hover{
+  transform: scale(1.08);
+}
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.btn-actions-pane-right {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.btn:not(:disabled):not(.disabled) {
+  cursor: pointer;
+}
+.btn-sm.btn-wide, .btn-group-sm>.btn-wide.btn {
+  padding: .25rem 1rem;
+  font-size: .8rem;
+  line-height: 1.5;
+  border-radius: .2rem;
+}
+.btn.btn-wide {
+  padding: .375rem 1.5rem;
+  font-size: .8rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+}
+
+:host ::ng-deep div[aria-hidden="true"].ui-accordion-content-wrapper {
+  height: 0px;
+}

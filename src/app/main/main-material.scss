@@ -1,0 +1,102 @@
+.main-header{
+  //background: rgb(5, 70, 32);
+  //background-image: url(assets/img/sbm/headerbg.png);
+  box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23);
+  height: 100px;
+  right: 0;
+  top: 0;
+  z-index: 1104;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-x: -143px;
+  background-position-y: -90px;
+
+}
+
+.sidebar-logo{
+  background: #1c2735;
+  box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23);
+  //padding: 0 25px;
+  height: 99px !important;
+}
+
+
+.logo-menu{
+  height: 50px;
+  //width: auto;
+  //margin-left: 30px;
+}
+
+.sidenav-scrollbar-container{
+  height: calc(100vh - 130px) !important;
+}
+
+
+
+/*
+.c-hamburger--htra span {
+  transition: transform 0.3s!important;
+  &:before {
+    transform-origin: top left!important;
+    transition: transform 0.3s, width 0.3s, top 0.3s!important;
+  }
+  &:after {
+    transform-origin: bottom left !important;
+    transition: transform 0.3s, width 0.3s, bottom 0.3s!important;
+  }
+}
+
+@media (min-width:1280px){
+  .sidebar-closed {
+    .c-hamburger--htra span {
+      transform: rotate(180deg)!important;
+      &:before,
+      &:after {
+        width: 50%!important;
+      }
+      &:before {
+        top: 0!important;
+        transform: translateX(-3px) translateY(1px) rotate(-45deg);
+      }
+      &:after {
+        bottom: 0!important;
+        transform: translateX(-3px) translateY(-1px) rotate(45deg) !important;
+      }
+    }
+  }
+}
+*/
+
+footer {
+  padding-top: 55px;
+  padding-left: 55px;
+  background: #1c2735;
+  position: relative;
+  z-index: 6;
+}
+
+.no-bullet {
+  margin-left: 0px;
+  list-style: none;
+  padding-left: 0px;
+}
+
+footer .soc_block {
+  border-top: 1px solid #333d4a;
+  padding-top: 30px;
+  padding-bottom: 17px;
+  margin-top: 40px;
+  font-size: 14px;
+  color: #7c8389;
+}
+
+footer .soc_block .foot_menu {
+  padding: 0;
+  margin: 0;
+}
+
+footer .foot_menu li {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 5px;
+}
