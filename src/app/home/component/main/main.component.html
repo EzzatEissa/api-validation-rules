@@ -72,7 +72,7 @@
                   <td class="text-center">
                     <select
                       [(ngModel)]="selectedRuleSet[key][i].caseConvention"
-                      name="{{key}}_defaultValue_{{dtSelectedRule.caseConvention}}"
+                      name="{{key}}_caseConvention_{{dtSelectedRule.caseConvention}}"
                       *ngIf="dtSelectedRule.caseConvention">
                       <option *ngFor="let caseConvention of caseConventions"
                               [value]="caseConvention">{{caseConvention}}</option>
@@ -124,6 +124,15 @@
 
 
   </form>
+  <div class="row">
+    <div class="col">
+      <pre>
+      <code>
+        {{getFinalValidationRule(selectedRuleSet) | json}}
+      </code>
+      </pre>
+    </div>
+  </div>
 
 
 </p-dialog>

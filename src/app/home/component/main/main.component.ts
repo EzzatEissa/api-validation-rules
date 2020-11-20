@@ -480,7 +480,7 @@ export class MainComponent implements OnInit {
     this.loadAllRules();
   }
 
-  getFinalValidationRule(currentRuleSet: any) {
+  getFinalValidationRule(currentRuleSet: any): any {
     const result = {};
     Object.keys(currentRuleSet).forEach(sectionName => {
       currentRuleSet[sectionName].forEach(rule => {
@@ -500,7 +500,7 @@ export class MainComponent implements OnInit {
 
       });
     });
-    console.log(result);
+    return result;
   }
 
 }
