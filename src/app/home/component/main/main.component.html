@@ -52,6 +52,7 @@
                   <th class="text-center">{{'Rule Description' | translate}}</th>
                   <th class="text-center" style="width: 5rem;">{{'Rule Spec' | translate}}</th>
                   <th class="text-center" style="width: 7rem;">{{'Rule Default Value' | translate}}</th>
+                  <th class="text-center" style="width: 10rem;">{{'Rule Case Convention' | translate}}</th>
                 </tr>
               </ng-template>
               <ng-template let-i="rowIndex" pTemplate="body" let-dtSelectedRule>
@@ -65,6 +66,16 @@
                       name="{{key}}_defaultValue_{{dtSelectedRule.name}}">
                       <option *ngFor="let defaultValue of defaultValues"
                               [value]="defaultValue">{{defaultValue}}</option>
+                    </select>
+                  </td>
+
+                  <td class="text-center">
+                    <select
+                      [(ngModel)]="selectedRuleSet[key][i].caseConvention"
+                      name="{{key}}_defaultValue_{{dtSelectedRule.caseConvention}}"
+                      *ngIf="dtSelectedRule.caseConvention">
+                      <option *ngFor="let caseConvention of caseConventions"
+                              [value]="caseConvention">{{caseConvention}}</option>
                     </select>
                   </td>
 

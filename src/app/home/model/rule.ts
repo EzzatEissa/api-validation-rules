@@ -4,4 +4,5 @@ export interface Rule {
   spec: string;
   defaultValue: string;
   type: string;
+  caseConvention: string;
 }
