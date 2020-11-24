@@ -2,6 +2,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {AuthService} from '../../../core/service/auth/auth.service';
 import {Rule} from '../../model/rule';
 import {RuleService} from '../../service/rule.service';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-main',
@@ -12,7 +13,11 @@ import {RuleService} from '../../service/rule.service';
 export class MainComponent implements OnInit {
 
   newRuleSetDisplay = false;
-  newRuleSetDisplayView = false;
+  newCustomRuleSetDisplay = false;
+  severityList: string[] = ['error', 'warn', 'info', 'hint'];
+  errorMessages: string[] = ['error', 'path', 'property', 'value', 'description'];
+  functionList: string[] = ['exist', 'pattern'];
+  customRuleForm: FormGroup;
   dtSelectedRule: Rule;
   model: any = {};
   public objKeys = Object.keys;
@@ -22,8 +27,17 @@ export class MainComponent implements OnInit {
     'upper_camel_case', 'lower_camel_case', 'k8s_camel_case', 'lower_dash_case', 'upper_dash_case'];
 
   MY_RULE_SET = 'userRules';
+  MY_CUSTOM_RULE_SET = 'userCustomRule';
   currentUserRuleSet: any = {};
+  currentUserCustomRuleSet: any = {};
   selectedRuleSet: any = {};
+  dialogHeader = '';
+  selectedAction = '';
+  selectedRuleName = '';
+  selectedCustomRuleName = '';
+  customRuleDialogHeader = '';
+  submitted = false;
+
   defaultRules: any = {
     'operation': [
       {
@@ -422,29 +436,73 @@ export class MainComponent implements OnInit {
       }
     ]
   };
-  dialogHeader = '';
-  selectedAction = '';
-  selectedRuleName = '';
-  constructor(private authService: AuthService,
-              private ruleService: RuleService) {
 
-   }
+  customRule: any = {
+    'extends': [['spectral:oas', 'off']],
+    'formats': ['oas2', 'oas3'],
+    'functionsDir': './src/spectral/functions',
+    'functions': [
+      'oasResponseHasExample'
+    ],
+    'rules': {}
+  };
+
+  constructor(private authService: AuthService,
+              private ruleService: RuleService,
+              private formBuilder: FormBuilder) {
+
+  }
 
   ngOnInit() {
     this.loadAllRules();
+    this.loadAllCustomRules();
     this.getFinalValidationRule(this.defaultRules);
-  }
 
+    this.customRuleForm = this.formBuilder.group({
+      ruleName: ['', [Validators.required]],
+      description: new FormControl(),
+      severity: ['', [Validators.required]],
+      errorMessage: ['', [Validators.required]],
+      jsonPath: new FormControl(),
+      field: new FormControl(),
+      functions: new FormControl(),
+      regex: new FormControl(),
+      match: new FormControl(),
+      fields: new FormControl()
+    });
+
+    this.customRuleForm.get('functions').valueChanges.subscribe(value => {
+      if (value === 'exist') {
+        this.controls['regex'].setValue(null);
+        this.controls['match'].setValue(null);
+        this.controls['match'].updateValueAndValidity();
+      } else if (value === 'pattern') {
+        this.controls['fields'].setValue(null);
+        this.controls['match'].updateValueAndValidity();
+      }
+    });
+  }
 
   loadAllRules() {
     let userRulesSetStr = localStorage.getItem(this.MY_RULE_SET);
     if (!userRulesSetStr) {
       const allMyRules = {'myDefaultRule': this.defaultRules};
-      localStorage.setItem('userRules',  JSON.stringify(allMyRules));
+      localStorage.setItem('userRules', JSON.stringify(allMyRules));
     }
     userRulesSetStr = localStorage.getItem(this.MY_RULE_SET);
     const myRuleSetJson = JSON.parse(userRulesSetStr);
     this.currentUserRuleSet = myRuleSetJson;
+  }
+
+  loadAllCustomRules() {
+    let userCustomRulesSetStr = localStorage.getItem(this.MY_CUSTOM_RULE_SET);
+    if (!userCustomRulesSetStr) {
+      // const allMyRules = {'myDefaultRule': this.defaultRules};
+      localStorage.setItem(this.MY_CUSTOM_RULE_SET, JSON.stringify(this.customRule));
+    }
+    userCustomRulesSetStr = localStorage.getItem(this.MY_CUSTOM_RULE_SET);
+    const myCustomRuleSetJson = JSON.parse(userCustomRulesSetStr);
+    this.currentUserCustomRuleSet = myCustomRuleSetJson;
   }
 
   logOut() {
@@ -469,15 +527,19 @@ export class MainComponent implements OnInit {
 
   }
 
-  onSubmit() {
-    if (this.selectedAction !== 'create' && this.model.name !== this.selectedRuleName ) {
-      this.ruleService.updateNewRuleSet(this.selectedRuleSet, this.model.name, this.selectedRuleName);
+  openCustomRuleSetDialog(key: string, action: string) {
+    this.newCustomRuleSetDisplay = true;
+    this.selectedAction = action;
+    if (this.selectedAction === 'create') {
+      this.customRuleDialogHeader = 'Create new Rule set';
     } else {
-      this.ruleService.addNewRuleSet(this.selectedRuleSet, this.model.name);
+      this.customRuleDialogHeader = 'Update new Rule set';
     }
-
-    this.newRuleSetDisplay = false;
-    this.loadAllRules();
+    this.customRuleForm.patchValue(this.currentUserCustomRuleSet['rules'][key]);
+    this.customRuleForm.get('ruleName').setValue(key);
+    if (action !== 'create') {
+      this.selectedCustomRuleName = key;
+    }
   }
 
   getFinalValidationRule(currentRuleSet: any): any {
@@ -495,12 +557,63 @@ export class MainComponent implements OnInit {
         if (!result[rule.spec][sectionName][rule.name]) {
           result[rule.spec][sectionName][rule.name] = {};
         }
-        result[rule.spec][sectionName][rule.name] =  (rule.caseConvention) ?
+        result[rule.spec][sectionName][rule.name] = (rule.caseConvention) ?
           rule.defaultValue + ', ' + rule.caseConvention : rule.defaultValue;
 
       });
     });
     return result;
+  }
+
+  get controls() {
+    return this.customRuleForm.controls;
+  }
+
+  addMessageType(errMsg) {
+    const currentErrMsg = this.controls['errorMessage'].value;
+    if (currentErrMsg) {
+      this.controls['errorMessage'].setValue(currentErrMsg + ',{{' + errMsg + '}}');
+    } else {
+      this.controls['errorMessage'].setValue('{{' + errMsg + '}}');
+    }
+
+  }
+
+  onSubmit() {
+    if (this.selectedAction !== 'create' && this.model.name !== this.selectedRuleName) {
+      this.ruleService.updateNewRuleSet(this.selectedRuleSet, this.model.name, this.selectedRuleName);
+    } else {
+      this.ruleService.addNewRuleSet(this.selectedRuleSet, this.model.name);
+    }
+
+    this.newRuleSetDisplay = false;
+    this.loadAllRules();
+  }
+
+  createCustomRule() {
+    this.submitted = true;
+    if (!this.customRuleForm.valid) {
+      return false;
+    }
+    this.ruleService.addNewCustomRule(this.customRuleForm.value, this.controls['ruleName'].value);
+    this.newCustomRuleSetDisplay = false;
+    this.loadAllCustomRules();
+  }
+
+  updateCustomRule() {
+    this.submitted = true;
+    if (!this.customRuleForm.valid) {
+      return false;
+    }
+    this.ruleService.updateNewCustomRule(this.customRuleForm.value, this.controls['ruleName'].value, this.selectedCustomRuleName);
+    this.newCustomRuleSetDisplay = false;
+    this.loadAllCustomRules();
+  }
+
+  deleteCustomRule() {
+    this.ruleService.deleteCustomRule(this.selectedCustomRuleName);
+    this.newCustomRuleSetDisplay = false;
+    this.loadAllCustomRules();
   }
 
 }

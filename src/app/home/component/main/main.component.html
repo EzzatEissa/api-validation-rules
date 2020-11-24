@@ -1,36 +1,71 @@
 <div class="row">
-  <div class="col text-left">
-    <button class="btn btn-primary btn-labeled mr-2 mb-3"
-            (click)="openRuleSetDialog(null, 'create')"><b><i aria-hidden="true" class="fa fa-plus"></i></b> Create
-    </button>
+  <div class="col">
+    <p-fieldset legend="Normal Rule" [toggleable]="true">
+      <div class="row">
+        <div class="col px-5">
+          <div class="row">
+            <div class="col text-left">
+              <button class="btn btn-primary btn-labeled mr-2 mb-3"
+                      (click)="openRuleSetDialog(null, 'create')"><b><i aria-hidden="true" class="fa fa-plus"></i></b>
+                Create
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <div class="col-4 card-view-hover mb-3" *ngFor="let key of objUserRuleKeys(currentUserRuleSet)">
+                  <app-card-view title="{{key}}"
+                                 icon="fa fa-gg-circle text-blue fa-9x"
+                                 (click)="openRuleSetDialog(key, 'update')"></app-card-view>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+    </p-fieldset>
   </div>
 </div>
+
 
 <div class="row">
   <div class="col">
-    <div class="row">
-      <div class="col-4 card-view-hover mb-3" *ngFor="let key of objUserRuleKeys(currentUserRuleSet)">
-        <app-card-view title="{{key}}"
-                       icon="fa fa-gg-circle text-blue fa-9x" (click) = "openRuleSetDialog(key, 'update')"></app-card-view>
+    <p-fieldset legend="Custom Rule" [toggleable]="true">
+      <div class="row">
+        <div class="col px-5">
+          <div class="row">
+            <div class="col text-left">
+              <button class="btn btn-primary btn-labeled mr-2 mb-3"
+                      (click)="openCustomRuleSetDialog(null, 'create')"><b><i aria-hidden="true" class="fa fa-plus"></i></b>
+                Create
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <div class="col-4 card-view-hover mb-3" *ngFor="let key of objUserRuleKeys(currentUserCustomRuleSet.rules)">
+                <app-card-view title="{{key}}"
+                icon="fa fa-cogs text-blue fa-9x"
+                (click)="openCustomRuleSetDialog(key, 'update')"></app-card-view>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
-      <!--<div class="col-4 card-view-hover m-2">-->
-        <!--<app-card-view title="Rule set 2"-->
-                       <!--icon="icon-smartphone text-blue fa-9x"-->
-                       <!--link="/api-rule/app"></app-card-view>-->
-      <!--</div>-->
-      <!--<div class="col-4 card-view-hover">-->
-        <!--<app-card-view title="Rule set 3"-->
-                       <!--icon="icon-unlock fa-9x text-blue"-->
-                       <!--link="/api-rule/permission"></app-card-view>-->
-      <!--</div>-->
 
 
-    </div>
-
-    <!--objUserRuleKeys-->
+    </p-fieldset>
   </div>
-
 </div>
+
 
 <p-dialog [header]="dialogHeader" [(visible)]="newRuleSetDisplay" position="center" [modal]="true"
           [style]="{width: '75vw'}" [baseZIndex]="10000" appendToBody="true">
@@ -65,17 +100,19 @@
                       [(ngModel)]="selectedRuleSet[key][i].defaultValue"
                       name="{{key}}_defaultValue_{{dtSelectedRule.name}}">
                       <option *ngFor="let defaultValue of defaultValues"
-                              [value]="defaultValue">{{defaultValue}}</option>
+                              [value]="defaultValue">{{defaultValue}}
+                      </option>
                     </select>
                   </td>
 
                   <td class="text-center">
                     <select
                       [(ngModel)]="selectedRuleSet[key][i].caseConvention"
-                      name="{{key}}_caseConvention_{{dtSelectedRule.caseConvention}}"
+                      name="{{key}}_caseConvention _{{dtSelectedRule.caseConvention}}"
                       *ngIf="dtSelectedRule.caseConvention">
                       <option *ngFor="let caseConvention of caseConventions"
-                              [value]="caseConvention">{{caseConvention}}</option>
+                              [value]="caseConvention">{{caseConvention}}
+                      </option>
                     </select>
                   </td>
 
@@ -111,7 +148,8 @@
             </div>
           </div>
           <div class="col">
-            <button class="btn btn-primary btn-labeled mr-2 mb-3" style="margin-top: 30px;"><b><i aria-hidden="true" class="fa fa-plus"></i></b>
+            <button class="btn btn-primary btn-labeled mr-2 mb-3" style="margin-top: 30px;"><b><i aria-hidden="true"
+                                                                                                  class="fa fa-plus"></i></b>
               {{(selectedAction === 'create')? 'Create' : 'Update'}}
             </button>
           </div>
@@ -120,7 +158,6 @@
       <div class="col">
       </div>
     </div>
-
 
 
   </form>
@@ -135,4 +172,160 @@
   </div>
 
 
+</p-dialog>
+
+<p-dialog [header]="customRuleDialogHeader" [(visible)]="newCustomRuleSetDisplay" position="center" [modal]="true"
+          [style]="{width: '65vw'}" [baseZIndex]="10000" appendToBody="true">
+
+  <form [formGroup]="customRuleForm">
+
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label><b>Rule Name</b></label>
+          <input type="text" formControlName="ruleName" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && controls.ruleName.errors }"/>
+          <div *ngIf="submitted && controls.ruleName.errors" class="invalid-feedback">
+            <div *ngIf="controls.ruleName.errors.required">Rule Name is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label><b>Severity</b></label>
+          <select formControlName="severity" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && controls.severity.errors }">
+            <option *ngFor="let severity of severityList"
+                    [value]="severity">{{severity}}
+            </option>
+          </select>
+          <div *ngIf="submitted && controls.severity.errors" class="invalid-feedback">
+            <div *ngIf="controls.severity.errors.required">Severity is required</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label><b>Description</b></label>
+          <textarea formControlName="description" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && controls.description.errors }"></textarea>
+          <div *ngIf="submitted && controls.description.errors" class="invalid-feedback">
+            <div *ngIf="controls.description.errors.required">Description is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <app-card cardTitle="Error Message">
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-primary btn-labeled mr-2 mb-3"
+                      (click)="addMessageType(errorMsg)"
+                      *ngFor="let errorMsg of errorMessages"><b><i aria-hidden="true" class="fa fa-plus"></i></b>
+                {{errorMsg}}
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <input type="text" formControlName="errorMessage" class="form-control"
+                       [ngClass]="{ 'is-invalid': submitted && controls.errorMessage.errors }"/>
+                <div *ngIf="submitted && controls.errorMessage.errors" class="invalid-feedback">
+                  <div *ngIf="controls.errorMessage.errors.required">Error Message is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </app-card>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col">
+        <div class="form-group">
+          <label><b>Json Path</b></label>
+          <input type="text" formControlName="jsonPath" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && controls.jsonPath.errors }"/>
+          <div *ngIf="submitted && controls.jsonPath.errors" class="invalid-feedback">
+            <div *ngIf="controls.jsonPath.errors.required">Json Path is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label><b>Field</b></label>
+          <input type="text" formControlName="field" class="form-control"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-auto">
+        <div class="form-group">
+          <label><b>Functions</b></label>
+          <select formControlName="functions" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && controls.functions.errors }">
+            <option *ngFor="let function of functionList"
+                    [value]="function">{{function}}
+            </option>
+          </select>
+          <div *ngIf="submitted && controls.functions.errors" class="invalid-feedback">
+            <div *ngIf="controls.functions.errors.required">Functions is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col" *ngIf="controls.functions.value && controls.functions.value !== 'exist'">
+        <div class="form-group">
+          <label><b>Regex</b></label>
+          <input type="text" formControlName="regex" class="form-control"/>
+        </div>
+      </div>
+      <div class="col mt-5" *ngIf="controls.functions.value && controls.functions.value !== 'exist'">
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input id="match" type="radio" value="true" name="match" formControlName="match">
+            Match
+          </label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input id="notMatch" type="radio" value="false" name="match" formControlName="match">
+            Not Match
+          </label>
+        </div>
+      </div>
+      <div class="col" *ngIf="controls.functions.value && controls.functions.value === 'exist'">
+        <div class="form-group">
+          <label><b>Fields</b></label>
+          <input type="text" formControlName="fields" class="form-control"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-primary btn-labeled mr-2 mb-3" *ngIf = "selectedAction === 'create'" (click) = "createCustomRule()" style="margin-top: 30px;"><b><i aria-hidden="true"
+                                                                                              class="fa fa-plus"></i></b>
+          Create
+        </button>
+        <button class="btn btn-secondary btn-labeled mr-2 mb-3" *ngIf = "selectedAction === 'update'" (click) = "updateCustomRule()" style="margin-top: 30px;"><b><i aria-hidden="true"
+                                                                                                                             class="fa fa-plus"></i></b>
+          Update
+        </button>
+        <button class="btn btn-danger btn-labeled mr-2 mb-3" *ngIf = "selectedAction === 'update'" (click) = "deleteCustomRule()" style="margin-top: 30px;"><b><i aria-hidden="true"
+                                                                                                                             class="fa fa-plus"></i></b>
+          Delete
+        </button>
+      </div>
+    </div>
+  </form>
 </p-dialog>
