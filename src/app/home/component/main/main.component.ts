@@ -467,7 +467,6 @@ export class MainComponent implements OnInit {
       severity: ['', [Validators.required]],
       errorMessage: ['', [Validators.required]],
       jsonPath: new FormControl(),
-      field: new FormControl(),
       functions: new FormControl(),
       regex: new FormControl(),
       match: new FormControl(),
@@ -573,6 +572,7 @@ export class MainComponent implements OnInit {
 
 
   getFinalCustomRule(customRule: any) {
+    console.log(customRule);
     const result = {
       'extends': [['spectral:oas', 'off']],
       'formats': ['oas2', 'oas3'],
@@ -591,7 +591,6 @@ export class MainComponent implements OnInit {
       result['rules'][key]['given'] = customRule['rules'][key]['jsonPath'];
       result['rules'][key]['severity'] = customRule['rules'][key]['severity'];
       result['rules'][key]['message'] = customRule['rules'][key]['errorMessage'];
-      result['rules'][key]['field'] = customRule['rules'][key]['field'];
       result['rules'][key]['then'] = {};
       if (customRule['rules'][key]['functions'] === 'pattern') {
         result['rules'][key]['then']['field'] = customRule['rules'][key]['fields'];

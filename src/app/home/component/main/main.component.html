@@ -248,7 +248,7 @@
     </div>
 
     <div class="row mt-4">
-      <div class="col-8">
+      <div class="col">
         <div class="form-group">
           <label><b>Json Path</b></label>
           <input type="text" formControlName="jsonPath" class="form-control"
@@ -256,12 +256,6 @@
           <div *ngIf="submitted && controls.jsonPath.errors" class="invalid-feedback">
             <div *ngIf="controls.jsonPath.errors.required">Json Path is required</div>
           </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="form-group">
-          <label><b>Field</b></label>
-          <input type="text" formControlName="field" class="form-control"/>
         </div>
       </div>
     </div>
