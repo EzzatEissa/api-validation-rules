@@ -67,7 +67,7 @@
 </div>
 
 
-<p-dialog [header]="dialogHeader" [(visible)]="newRuleSetDisplay" position="center" [modal]="true"
+<p-dialog [header]="dialogHeader" *ngIf="newRuleSetDisplay" [(visible)]="newRuleSetDisplay" position="center" [modal]="true"
           [style]="{width: '75vw'}" [baseZIndex]="10000" appendToBody="true">
   <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
 
@@ -225,16 +225,6 @@
         <app-card cardTitle="Error Message">
           <div class="row">
             <div class="col">
-              <button class="btn btn-primary btn-labeled mr-2 mb-3"
-                      (click)="addMessageType(errorMsg)"
-                      *ngFor="let errorMsg of errorMessages"><b><i aria-hidden="true" class="fa fa-plus"></i></b>
-                {{errorMsg}}
-              </button>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
               <div class="form-group">
                 <input type="text" formControlName="errorMessage" class="form-control"
                        [ngClass]="{ 'is-invalid': submitted && controls.errorMessage.errors }"/>
@@ -244,12 +234,22 @@
               </div>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-primary btn-labeled mr-2 mb-3"
+                      (click)="addMessageType(errorMsg)"
+                      *ngFor="let errorMsg of errorMessages"><b><i aria-hidden="true" class="fa fa-plus"></i></b>
+                {{errorMsg}}
+              </button>
+            </div>
+          </div>
         </app-card>
       </div>
     </div>
 
     <div class="row mt-4">
-      <div class="col">
+      <div class="col-8">
         <div class="form-group">
           <label><b>Json Path</b></label>
           <input type="text" formControlName="jsonPath" class="form-control"
@@ -259,7 +259,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col-4">
         <div class="form-group">
           <label><b>Field</b></label>
           <input type="text" formControlName="field" class="form-control"/>
@@ -280,6 +280,16 @@
           <div *ngIf="submitted && controls.functions.errors" class="invalid-feedback">
             <div *ngIf="controls.functions.errors.required">Functions is required</div>
           </div>
+        </div>
+      </div>
+      <div class="col" *ngIf="controls.functions.value">
+        <div class="form-group">
+          <label><b>{{controls.functions.value === 'exist'? 'Fields': 'Field'}}</b></label>
+          <input type="text"
+                 formControlName="fields"
+                 class="form-control"
+                 title="{{controls.functions.value === 'exist'? 'add multiple fields seperated by comma': ''}}"
+          />
         </div>
       </div>
       <div class="col" *ngIf="controls.functions.value && controls.functions.value !== 'exist'">
@@ -303,12 +313,6 @@
           </label>
         </div>
       </div>
-      <div class="col" *ngIf="controls.functions.value && controls.functions.value === 'exist'">
-        <div class="form-group">
-          <label><b>Fields</b></label>
-          <input type="text" formControlName="fields" class="form-control"/>
-        </div>
-      </div>
     </div>
 
     <div class="row">
@@ -328,4 +332,5 @@
       </div>
     </div>
   </form>
+
 </p-dialog>

@@ -6,8 +6,8 @@ import {TranslateModule} from '@ngx-translate/core';
 import {NgbActiveModal, NgbModule, NgbPopoverModule} from '@ng-bootstrap/ng-bootstrap';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {CheckboxModule} from 'primeng/checkbox';
-import {TextViewerComponent} from "./component/text-viewer/text-viewer.component";
-import {ValuesListViewComponent} from "./component/values-list-view/values-list-view.component";
+import {TextViewerComponent} from './component/text-viewer/text-viewer.component';
+import {ValuesListViewComponent} from './component/values-list-view/values-list-view.component';
 
 import {FieldsetModule} from 'primeng/fieldset';
 import {FileUploadModule} from 'primeng/fileupload';
@@ -19,11 +19,11 @@ import {TriStateCheckboxModule} from 'primeng/tristatecheckbox';
 
 import {DialogModule} from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from "primeng/table";
-import {CardComponent} from "./component/card/card.component";
+import { TableModule } from 'primeng/table';
+import {CardComponent} from './component/card/card.component';
 import {TooltipModule} from 'primeng/tooltip';
 import { CardViewComponent } from './component/card-view/card-view.component';
-import {RouterModule} from "@angular/router";
+import {RouterModule} from '@angular/router';
 
 import { PaginatorModule} from 'primeng/paginator';
 import { CountsComponent } from './component/counts/counts.component';

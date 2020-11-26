@@ -457,7 +457,10 @@ export class MainComponent implements OnInit {
     this.loadAllRules();
     this.loadAllCustomRules();
     this.getFinalValidationRule(this.defaultRules);
-
+    // if (this.currentUserCustomRuleSet['rules']['2222222']) {
+    //   this.getFinalCustomRule(this.currentUserCustomRuleSet['rules']['2222222']);
+    // }
+    this.getFinalCustomRule(this.currentUserCustomRuleSet);
     this.customRuleForm = this.formBuilder.group({
       ruleName: ['', [Validators.required]],
       description: new FormControl(),
@@ -528,16 +531,19 @@ export class MainComponent implements OnInit {
   }
 
   openCustomRuleSetDialog(key: string, action: string) {
+    this.customRuleForm.reset();
     this.newCustomRuleSetDisplay = true;
     this.selectedAction = action;
     if (this.selectedAction === 'create') {
+      this.customRuleForm.controls['severity'].setValue('warn', {onlySelf: true});
       this.customRuleDialogHeader = 'Create new Rule set';
     } else {
       this.customRuleDialogHeader = 'Update new Rule set';
     }
-    this.customRuleForm.patchValue(this.currentUserCustomRuleSet['rules'][key]);
-    this.customRuleForm.get('ruleName').setValue(key);
+
     if (action !== 'create') {
+      this.customRuleForm.patchValue(this.currentUserCustomRuleSet['rules'][key]);
+      this.customRuleForm.get('ruleName').setValue(key);
       this.selectedCustomRuleName = key;
     }
   }
@@ -565,6 +571,49 @@ export class MainComponent implements OnInit {
     return result;
   }
 
+
+  getFinalCustomRule(customRule: any) {
+    const result = {
+      'extends': [['spectral:oas', 'off']],
+      'formats': ['oas2', 'oas3'],
+      'functionsDir': './src/spectral/functions',
+      'functions': [
+        'oasResponseHasExample'
+      ],
+      'rules': {}
+    };
+    console.log(customRule);
+
+    Object.keys(customRule['rules']).forEach(key => {
+      result['rules'][key] = {};
+      result['rules'][key]['description'] = customRule['rules'][key]['description'];
+      result['rules'][key]['type'] = 'validation';
+      result['rules'][key]['given'] = customRule['rules'][key]['jsonPath'];
+      result['rules'][key]['severity'] = customRule['rules'][key]['severity'];
+      result['rules'][key]['message'] = customRule['rules'][key]['errorMessage'];
+      result['rules'][key]['field'] = customRule['rules'][key]['field'];
+      result['rules'][key]['then'] = {};
+      if (customRule['rules'][key]['functions'] === 'pattern') {
+        result['rules'][key]['then']['field'] = customRule['rules'][key]['fields'];
+        result['rules'][key]['then']['function'] = customRule['rules'][key]['functions'];
+        result['rules'][key]['then']['functionOptions'] = {};
+        if (customRule['rules'][key]['match'] === 'true') {
+          result['rules'][key]['then']['functionOptions']['match'] = customRule['rules'][key]['regex'];
+        } else if (customRule['rules'][key]['match'] === 'false') {
+          result['rules'][key]['then']['functionOptions']['notMatch'] = customRule['rules'][key]['regex'];
+        }
+      } else if (customRule['rules'][key]['functions'] === 'exist') {
+        const fieldList = customRule['rules'][key]['fields'].split(',');
+        const existFields = [];
+        fieldList.forEach(field => {
+          existFields.push({'field': field, 'function': 'exist'});
+        });
+        result['rules'][key]['then'] = existFields;
+      }
+    });
+    console.log(result);
+  }
+
   get controls() {
     return this.customRuleForm.controls;
   }
@@ -572,7 +621,7 @@ export class MainComponent implements OnInit {
   addMessageType(errMsg) {
     const currentErrMsg = this.controls['errorMessage'].value;
     if (currentErrMsg) {
-      this.controls['errorMessage'].setValue(currentErrMsg + ',{{' + errMsg + '}}');
+      this.controls['errorMessage'].setValue(currentErrMsg + '{{' + errMsg + '}}');
     } else {
       this.controls['errorMessage'].setValue('{{' + errMsg + '}}');
     }
