@@ -171,7 +171,6 @@
     </div>
   </div>
 
-
 </p-dialog>
 
 <p-dialog [header]="customRuleDialogHeader" [(visible)]="newCustomRuleSetDisplay" position="center" [modal]="true"
@@ -288,7 +287,7 @@
           <input type="text"
                  formControlName="fields"
                  class="form-control"
-                 title="{{controls.functions.value === 'exist'? 'add multiple fields seperated by comma': ''}}"
+                 title="{{controls.functions.value === 'exist'? 'add multiple fields separated by comma': ''}}"
           />
         </div>
       </div>
@@ -332,5 +331,13 @@
       </div>
     </div>
   </form>
-
+  <div class="row">
+    <div class="col">
+      <pre>
+      <code>
+        {{getFinalCustomRule(currentUserCustomRuleSet) | json}}
+      </code>
+      </pre>
+    </div>
+  </div>
 </p-dialog>

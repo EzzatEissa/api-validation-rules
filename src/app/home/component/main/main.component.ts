@@ -612,6 +612,7 @@ export class MainComponent implements OnInit {
       }
     });
     console.log(result);
+    return result;
   }
 
   get controls() {
