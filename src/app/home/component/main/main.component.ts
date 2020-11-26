@@ -535,9 +535,9 @@ export class MainComponent implements OnInit {
     this.selectedAction = action;
     if (this.selectedAction === 'create') {
       this.customRuleForm.controls['severity'].setValue('warn', {onlySelf: true});
-      this.customRuleDialogHeader = 'Create new Rule set';
+      this.customRuleDialogHeader = 'Create new custom rule';
     } else {
-      this.customRuleDialogHeader = 'Update new Rule set';
+      this.customRuleDialogHeader = 'Update new custom rule';
     }
 
     if (action !== 'create') {
