@@ -39,7 +39,7 @@ export class MainComponent implements OnInit {
   submitted = false;
 
   defaultRules: any = {
-    'operation': [
+    'operations': [
       {
         'name': 'undefined_tag',
         'description': 'Flag a tag that is in operations and not listed in tags on the top level.',
@@ -136,7 +136,7 @@ export class MainComponent implements OnInit {
       {
         'name': 'pagination_style',
         'description': 'Flag any parameter or response schema that does not follow pagination requirements.',
-        'spec': 'oas3',
+        'spec': 'shared',
         'caseConvention': null,
         'defaultValue': 'warning'
       }
@@ -563,7 +563,7 @@ export class MainComponent implements OnInit {
           result[rule.spec][sectionName][rule.name] = {};
         }
         result[rule.spec][sectionName][rule.name] = (rule.caseConvention) ?
-          rule.defaultValue + ', ' + rule.caseConvention : rule.defaultValue;
+          [rule.defaultValue , rule.caseConvention] : rule.defaultValue;
 
       });
     });
@@ -605,7 +605,7 @@ export class MainComponent implements OnInit {
         const fieldList = customRule['rules'][key]['fields'].split(',');
         const existFields = [];
         fieldList.forEach(field => {
-          existFields.push({'field': field, 'function': 'exist'});
+          existFields.push({'field': field, 'function': 'truthy'});
         });
         result['rules'][key]['then'] = existFields;
       }
