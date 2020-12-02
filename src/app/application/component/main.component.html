@@ -1,0 +1,124 @@
+<app-card cardTitle="Application">
+  <div class="row">
+    <div class="col px-5">
+        <div class="row">
+          <div class="col text-left">
+            <button class="btn btn-primary btn-labeled mr-2 mb-3"
+                    (click)="openPersonaDialog()"><b><i aria-hidden="true" class="fa fa-plus"></i></b>
+              Create
+            </button>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <p-table [value]="apps"
+               [responsive]="true"
+               [rowHover]="true"
+               class="sbm-dt"
+               [paginator]="apps?.length > 10"
+               [rows]="10">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class = "text-center">Name</th>
+            <th class = "text-center">Persona</th>
+            <th class = "text-center">Environment</th>
+          </tr>
+        </ng-template>
+        <ng-template let-i="rowIndex" pTemplate="body" let-app>
+          <tr class="ui-selectable-row">
+            <td class = "text-center">{{app.name}}</td>
+            <td class = "text-center" >{{app.persona}}</td>
+            <td class = "text-center" >
+              <ul>
+                <li *ngFor = "let env of app.envs">
+                  {{env}}
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="3" class="text-center">
+              no data
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+  </div>
+</app-card>
+
+
+<p-dialog header="Choose Persona" [(visible)]="personaDialogDisplay" position="center" [modal]="true"
+          [style]="{width: '65vw'}" [baseZIndex]="10000" appendToBody="true">
+
+  <div class="row">
+    <div class="col">
+      <app-card-view title="Microservice"
+                     icon="fa fa-cogs text-blue fa-9x"
+                     (click)="linkAppToEnvironments('Microservice')" [link]="null"></app-card-view>
+    </div>
+    <div class="col">
+      <app-card-view title="Integration Service"
+                     icon="fa fa-cogs text-blue fa-9x"
+                     (click)="linkAppToEnvironments('IntegrationService')" [link]="null"></app-card-view>
+    </div>
+  </div>
+</p-dialog>
+
+
+<p-dialog header="Link environments to application" [(visible)]="linkEnvToAppDialogDisplay" position="center" [modal]="true"
+          [style]="{width: '65vw'}" [baseZIndex]="10000" appendToBody="true">
+
+  <div class="row">
+    <div class="col">
+      <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+        <div class="row">
+          <div class="col-4 card-view-hover mb-3" *ngFor="let env of environments">
+            <app-card-view title="{{env.name}}"
+                           icon="fa fa-cogs text-blue fa-9x"
+                           [link]="null"
+                           [bgColor]="containsEnv(env.name)? 'bg-card-view-selected': 'bg-card-view'"
+            (click) = "selectEnvToApp(env.name)"
+            ></app-card-view>
+          </div>
+        </div>
+        <div class="row" *ngIf="f.submitted && (selectedEnvs === null || selectedEnvs.length === 0)">
+          <div class="col">
+              <p class="text-danger">Select environment</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text"
+                     name="name"
+                     class="form-control"
+                     [(ngModel)]="model.name"
+                     #name="ngModel"
+                     [ngClass]="{ 'is-invalid': f.submitted && name.invalid }"
+                     required>
+              <div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
+                <div *ngIf="name.errors.required">Name is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col text-left">
+            <button class="btn btn-primary btn-labeled mr-2 mb-3"><b><i aria-hidden="true" class="fa fa-link"></i></b>
+              Link
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</p-dialog>
+

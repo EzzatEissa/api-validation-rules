@@ -1,20 +1,43 @@
 <div class="row">
   <div class="col">
-    <div class="box-part text-center bg-white rounded-2 cursor-pointer p-5" [routerLink]="[link]">
-      <i class="{{icon}}" aria-hidden="true"></i>
 
-      <div class="title font-weight-bold card-title">
-        {{title}}
+    <ng-container *ngIf = "link !== null">
+      <div class="box-part text-center rounded-2 {{bgColor}} cursor-pointer p-5"  [routerLink]="[link]">
+        <i class="{{icon}}" aria-hidden="true"></i>
+
+        <div class="title font-weight-bold card-title">
+          {{title}}
+        </div>
+
+        <div class="text-center py-3 card-desc">
+          <span>{{description}}</span>
+        </div>
+
+        <!--<a class="py-5 font-weight-bold" [routerLink]="[link]">View</a>-->
+
+        <!--button class="btn btn-primary btn-labeled mr-2 mb-3"><b><i aria-hidden="true" class="fa fa-eye"></i></b> View </button-->
+
       </div>
+    </ng-container>
 
-      <div class="text-center py-3 card-desc">
-        <span>{{description}}</span>
+    <ng-container *ngIf = "link === null">
+      <div class="box-part text-center rounded-2 {{bgColor}} cursor-pointer p-5">
+        <i class="{{icon}}" aria-hidden="true"></i>
+
+        <div class="title font-weight-bold card-title">
+          {{title}}
+        </div>
+
+        <div class="text-center py-3 card-desc">
+          <span>{{description}}</span>
+        </div>
+
+        <!--<a class="py-5 font-weight-bold" [routerLink]="[link]">View</a>-->
+
+        <!--button class="btn btn-primary btn-labeled mr-2 mb-3"><b><i aria-hidden="true" class="fa fa-eye"></i></b> View </button-->
+
       </div>
+    </ng-container>
 
-      <!--<a class="py-5 font-weight-bold" [routerLink]="[link]">View</a>-->
-
-      <!--button class="btn btn-primary btn-labeled mr-2 mb-3"><b><i aria-hidden="true" class="fa fa-eye"></i></b> View </button-->
-
-    </div>
   </div>
 </div>

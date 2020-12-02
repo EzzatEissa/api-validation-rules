@@ -22,19 +22,19 @@ const MENUITEMS = [
     name: 'Home',
     type: 'link',
     icon: 'fa fa-home',
+  },
+  {
+    state: 'api-rule/app',
+    name: 'Applications',
+    type: 'link',
+    icon: 'fa fa-desktop',
+  },
+  {
+    state: 'api-rule/env',
+    name: 'Environments',
+    type: 'link',
+    icon: 'fa fa-cogs',
   }
-  // ,
-  // {
-  //    state: 'dashboard',
-  //    name: 'DASHBOARD',
-  //    type: 'sub',
-  //    icon: 'icon-speedometer icons',
-  //    label: 'New',
-  //    children: [
-  //       { state: 'dashboard-v1', name: 'DASHBOARD 1' },
-  //       { state: 'dashboard-v2', name: 'DASHBOARD 2' },
-  //    ]
-  // }
 
 ];
 

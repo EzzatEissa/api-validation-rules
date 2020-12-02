@@ -12,6 +12,7 @@ export class CardViewComponent implements OnInit {
   @Input() title: string;
   @Input() description: string;
   @Input() link: string;
+  @Input() bgColor: string = 'bg-card-view';
 
   constructor() { }
 

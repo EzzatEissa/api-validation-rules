@@ -26,6 +26,27 @@ export const AppRoutes: Routes = [
         import('./home/home.module').then(m => m.HomeModule)
     }],
   },
+
+  {
+    path: '',
+    component: MainComponent,
+    canActivate: [AuthGuard],
+    runGuardsAndResolvers: 'always',
+    children: [{
+      path: 'api-rule/app', loadChildren: () =>
+        import('./application/application.module').then(m => m.ApplicationModule)
+    }],
+  },
+  {
+    path: '',
+    component: MainComponent,
+    canActivate: [AuthGuard],
+    runGuardsAndResolvers: 'always',
+    children: [{
+      path: 'api-rule/env', loadChildren: () =>
+        import('./environment/environment.module').then(m => m.EnvironmentModule)
+    }],
+  },
   {
     path: '**',
     redirectTo: 'api-rule'

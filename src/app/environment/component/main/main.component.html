@@ -1,0 +1,129 @@
+<app-card cardTitle="Environment">
+  <div class="row">
+    <div class="col px-5">
+      <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+
+        <div class="row mt-2">
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label>Name</label>
+                  <input type="text"
+                         name="name"
+                         class="form-control"
+                         [(ngModel)]="model.name"
+                         #name="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && name.invalid }"
+                         required>
+                  <div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
+                    <div *ngIf="name.errors.required">Name is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label>IP</label>
+                  <input type="text"
+                         name="ip"
+                         class="form-control"
+                         [(ngModel)]="model.ip"
+                         #ip="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && ip.invalid }"
+                         required>
+                  <div *ngIf="f.submitted && ip.invalid" class="invalid-feedback">
+                    <div *ngIf="ip.errors.required">Ip is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label>Port</label>
+                  <input type="text"
+                         name="port"
+                         class="form-control"
+                         [(ngModel)]="model.port"
+                         #port="ngModel"
+                         [ngClass]="{ 'is-invalid': f.submitted && port.invalid }"
+                         required>
+                  <div *ngIf="f.submitted && port.invalid" class="invalid-feedback">
+                    <div *ngIf="port.errors.required">Port is required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <!--<div class="form-check">-->
+                <!--<label>Production</label>-->
+                <!--<p-checkbox name="prod"  [(ngModel)]="model.prod"></p-checkbox>-->
+                <!--</div>-->
+
+                <div class="form-group">
+                  <label for="binary">Production</label>
+                  <p-checkbox name="prod" class="form-control" #prod="ngModel" [(ngModel)]="model.prod" binary="true"
+                              id="binary" [ngClass]="{ 'is-invalid': f.submitted && prod.invalid }"
+                              required="true"></p-checkbox>
+
+                  <div *ngIf="f.submitted && prod.invalid" class="invalid-feedback">
+                    <div *ngIf="prod.errors.required">Production is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col text-left">
+            <button class="btn btn-primary btn-labeled mr-2 mb-3"
+                    (click)="createNewEnvironment()"><b><i aria-hidden="true" class="fa fa-plus"></i></b>
+              Create
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p *ngIf = "f.submitted && isExist" class="text-danger">
+              Environment already exist
+            </p>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <p-table [value]="environments" [responsive]="true" [rowHover]="true" class="sbm-dt" [paginator]="environments?.length > 10" [rows]="10">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class = "text-center">Name</th>
+            <th class = "text-center" style="width: 12rem;">Ip</th>
+            <th class = "text-center" style="width: 12rem;">Port</th>
+            <th class = "text-center" style="width: 12rem;">Production</th>
+          </tr>
+        </ng-template>
+        <ng-template let-i="rowIndex" pTemplate="body" let-dtEnvironment>
+          <tr class="ui-selectable-row">
+            <td class = "text-center">{{dtEnvironment.name}}</td>
+            <td class = "text-center" >{{dtEnvironment.ip}}</td>
+            <td class = "text-center">{{dtEnvironment.port}}</td>
+
+            <td class = "text-center" >
+                    <span class = "badge badge-bill" [ngClass] = "{'badge-primary' : dtEnvironment.prod === true,'badge-danger' : dtEnvironment.prod !== true}">
+                    {{dtEnvironment.prod}}
+                    </span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="text-center">
+              no data
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+  </div>
+</app-card>
